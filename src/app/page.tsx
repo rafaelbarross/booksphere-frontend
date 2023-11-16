@@ -3,7 +3,7 @@
 
 import Image from 'next/image'
 import BookCategory from './components/carousel-hero/carouselHero'
-import BookWeek from './components/carousel-books/carousel-books'
+import BookWeek from './components/carousel-books-week/book-week'
 import BookLike from './components/book-most-like/book-like'
 import { Typography } from '@material-tailwind/react'
 import { Footer } from './components/footer/footer'
