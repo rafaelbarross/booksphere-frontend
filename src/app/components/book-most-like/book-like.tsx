@@ -11,6 +11,7 @@ import '../../globals.css'
 // import required modules
 import { Grid, Pagination, Navigation, Autoplay } from 'swiper/modules';
 import { Typography } from '@material-tailwind/react';
+import { useRouter } from 'next/navigation';
 
 // type Props = {
 //     title: string;
@@ -18,15 +19,39 @@ import { Typography } from '@material-tailwind/react';
 
 //   };
 
+type Book = {
+  id: string;
+  img: string;
+  alt: string;
+  audio?: string;
+};
+
+  export const booksLike: Book[] = [
+    { id: 'book11', img: './mostLike/book1.png', alt: 'Book 1' },
+    { id: 'book22', img: './mostLike/book2.png', alt: 'Book 2' },
+    { id: 'book32', img: './mostLike/book3.png', alt: 'Book 3' },
+    { id: 'book42', img: './mostLike/book4.png', alt: 'Book 4' },
+    { id: 'book52', img: './mostLike/book5.png', alt: 'Book 5' },
+    // Adicione mais livros conforme necessário
+  ];
+
 export default function BookLike() {
+
+  const {push} = useRouter();
+
+  const readingBook = (id: string) => {
+    push(`/${id}`);
+  };
+
+
   return (
     <>
       <Typography variant="h3" color="blue-gray" className='mb-8'>
-            Mais curtidos
-    </Typography>
+        Mais curtidos
+      </Typography>
       <Swiper
 
-      slidesPerView={2}
+        slidesPerView={2}
 
         breakpoints={{
           // quando a largura da janela é >= 640px
@@ -64,45 +89,11 @@ export default function BookLike() {
       // centeredSlides={true}
 
       >
-        <SwiperSlide className="text-center space-y-3">
-          <img className='drop-shadow-md' src="./mostLike/book1.png" alt="" />
-        </SwiperSlide>
-
-        <SwiperSlide className="text-center  space-y-3">
-          <img className='drop-shadow-md' src="./mostLike/book2.png" alt="" />
-      
-        </SwiperSlide>
-
-        <SwiperSlide className="text-center  space-y-3">
-          <img className='drop-shadow-md' src="./mostLike/book3.png" alt="" />
-        </SwiperSlide>
-
-        <SwiperSlide className="text-center  space-y-3">
-          <img className='drop-shadow-md' src="./mostLike/book4.png" alt="" />
-     
-        </SwiperSlide>
-
-        <SwiperSlide className="text-center  space-y-3">
-          <img className='drop-shadow-md' src="./mostLike/book5.png" alt="" />
-        </SwiperSlide>
-
-        <SwiperSlide className="text-center  space-y-3">
-          <img className='drop-shadow-md' src="./mostLike/book5.png" alt="" />
-        </SwiperSlide>
-
-        <SwiperSlide className="text-center  space-y-3">
-          <img className='drop-shadow-md' src="./mostLike/book5.png" alt="" />
-        </SwiperSlide>
-
-        <SwiperSlide className="text-center  space-y-3">
-          <img className='drop-shadow-md' src="./mostLike/book5.png" alt="" />
-        </SwiperSlide>
-
-        <SwiperSlide className="text-center  space-y-3">
-          <img className='drop-shadow-md' src="./mostLike/book5.png" alt="" />
-        </SwiperSlide>
-
-
+        {booksLike.map((book) => (
+          <SwiperSlide key={book.id} onClick={() => readingBook(book.id)} className="text-center space-y-3 cursor-pointer">
+            <img className='drop-shadow-md' src={book.img} alt={book.alt} />
+          </SwiperSlide>
+        ))}
       </Swiper>
     </>
   );
