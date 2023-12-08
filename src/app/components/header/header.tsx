@@ -1,26 +1,42 @@
 'use client'
 
-import React from "react";
 import {
   Navbar,
   MobileNav,
   Typography,
   Button,
-  IconButton,
+  Menu,
+  MenuHandler,
+  MenuList,
+  MenuItem,
+  Avatar, IconButton
 } from "@material-tailwind/react";
+import {
+  UserCircleIcon, ChevronDownIcon,
+  Cog6ToothIcon,
+  InboxArrowDownIcon,
+  LifebuoyIcon,
+  PowerIcon,
+  BookmarkIcon,
+  MagnifyingGlassIcon,
+  ArrowSmallLeftIcon
+} from "@heroicons/react/24/solid";
+
+import React, { useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
- 
+
 export function Header() {
-  const [openNav, setOpenNav] = React.useState(false);
- 
+  const [openNav, setOpenNav] = useState(false);
+  const [isOpen, setIsOpen] = useState(false);
+
   React.useEffect(() => {
     window.addEventListener(
       "resize",
       () => window.innerWidth >= 960 && setOpenNav(false),
     );
   }, []);
- 
+
   const navList = (
     <ul className="mt-2 mb-4 flex flex-col gap-2 lg:mb-0 lg:mt-0 lg:flex-row lg:items-center lg:gap-6">
       <Typography
@@ -41,9 +57,9 @@ export function Header() {
             fill="#90A4AE"
           />
         </svg>
- 
+
         <a href="#" className="flex items-center">
-          Pages
+          TEXT
         </a>
       </Typography>
       <Typography
@@ -67,7 +83,7 @@ export function Header() {
           />
         </svg>
         <a href="#" className="flex items-center">
-          Account
+          TEXT
         </a>
       </Typography>
       <Typography
@@ -89,7 +105,7 @@ export function Header() {
           />
         </svg>
         <a href="#" className="flex items-center">
-          Blocks
+          TEXT
         </a>
       </Typography>
       <Typography
@@ -113,84 +129,154 @@ export function Header() {
           />
         </svg>
         <a href="#" className="flex items-center">
-          Docs
+          TEXT
         </a>
       </Typography>
     </ul>
   );
- 
+
   return (
-    <Navbar className="z-10 sticky top-7 shadow-3xl mx-auto 2xl:max-w-screen-2xl xl:max-w-screen-xl px-4 py-2 lg:px-8 lg:py-4 mb-20">
-      <div className="container mx-auto flex items-center justify-between text-blue-gray-900">
-        <div>
-          <Link href="/">
-            <Image className="w-32" width={1} height={1} src="./logo-leitura.svg" alt="" />
-          </Link>
-        </div>
-        <div className="hidden lg:block">{navList}</div>
-        <div className="flex items-center gap-x-1">
-          <Button variant="text" size="sm" className="hidden lg:inline-block">
-            <span>ENTRAR</span>
-          </Button>
-          <Button
-          
-            size="sm"
-            className="hidden lg:inline-block  bg-[#FF3E7F]"
-          >
-            <span>REGISTRE-SE</span>
-          </Button>
-        </div>
-        <IconButton
-          variant="text"
-          className="ml-auto h-6 w-6 text-inherit hover:bg-transparent focus:bg-transparent active:bg-transparent lg:hidden text-[#FF3E7F]"
-          ripple={false}
-          onClick={() => setOpenNav(!openNav)}
-        >
-          {openNav ? (
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              fill="none"
-              className="h-6 w-6"
-              viewBox="0 0 24 24"
-              stroke="currentColor"
-              strokeWidth={2}
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                d="M6 18L18 6M6 6l12 12"
-              />
-            </svg>
-          ) : (
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              className="h-6 w-6"
-              fill="none"
-              stroke="currentColor"
-              strokeWidth={2}
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                d="M4 6h16M4 12h16M4 18h16"
-              />
-            </svg>
-          )}
-        </IconButton>
-      </div>
-      <MobileNav  open={openNav}>
-        <div className="container mx-auto">
-          {navList}
-          <div className="flex items-center gap-x-1">
-            <Button fullWidth variant="text" size="sm" className="">
-              <span>ENTRAR</span>
-            </Button>
-            <Button fullWidth size="sm" className="bg-[#FF3E7F]">
-              <span>REGISTRE-SE</span>
-            </Button>
+    <Navbar className="z-10 sticky top-7 shadow-3xl mx-auto 2xl:max-w-screen-2xl xl:max-w-screen-xl px-4 py-2 lg:px-8 lg:py-3 mb-20">
+
+      <div className="container mx-auto flex items-center justify-between text-blue-gray-900 ">
+        {!isOpen && (
+          <div>
+            <Link href="/">
+              <Image className="w-32" width={1} height={1} src="./logo-leitura.svg" alt="logo do site leitura inclusiva" />
+            </Link>
           </div>
+        )}
+        <div className="flex items-center justify-between w-full">
+          <div className={`relative block ${isOpen ? 'w-full' : 'w-10'} transition-width duration-200 ease-in-out`}>
+            <span className="sr-only">Search</span>
+
+            {isOpen && (
+              <div className="flex space-x- ">
+
+
+
+                <span className=" flex items-center ">
+                  <button className=" px-2 rounded-md h-full" onClick={() => setIsOpen(!isOpen)}>
+                    <ArrowSmallLeftIcon className="h-6 w-6 text-pink-300" />
+                  </button>
+                </span>
+
+                <div className=" pl-2 w-full flex bo rounded-md   focus:outline-none focus:border-sky-500 focus:ring-sky-500 focus:ring-pink-400 focus:ring-1  py-2 lg:py-3">
+
+                 
+
+                  <input
+                    className="placeholder:itali placeholder:text-pink-200 block bg-transparent w-full focus:outline-none  rounded-md py-0 pl-0 pr-3  sm:text-sm"
+                    placeholder="Procure seu livro..."
+                    type="text"
+                    name="search"
+                  />
+
+                   <span className=" flex items-center ">
+                    <MagnifyingGlassIcon className="h-6 w-6 text-pink-200 " />
+                  </span>
+
+                </div>
+
+              </div>
+            )}
+          </div>
+          {!isOpen && (
+            <div className="flex space-x-1">
+              <span className=" inset-y-0 left-0 flex items-center pl-2">
+                <button className="px-2 rounded-md h-full" onClick={() => setIsOpen(!isOpen)}>
+                  <MagnifyingGlassIcon className="h-6 w-6 text-pink-200" />
+                </button>
+              </span>
+              <ProfileMenu />
+            </div>
+          )}
         </div>
-      </MobileNav>
+      </div>
+
     </Navbar>
+  );
+}
+
+
+const profileMenuItems = [
+  // {
+  //   label: "My Profile",
+  //   icon: UserCircleIcon,
+  // },
+  // {
+  //   label: "Edit Profile",
+  //   icon: Cog6ToothIcon,
+  // },
+  // {
+  //   label: "Inbox",
+  //   icon: InboxArrowDownIcon,
+  // },
+  {
+    label: "Livros salvos",
+    icon: BookmarkIcon,
+  },
+  {
+    label: "Sign Out",
+    icon: PowerIcon,
+  },
+];
+
+function ProfileMenu() {
+  const [isMenuOpen, setIsMenuOpen] = React.useState(false);
+
+  const closeMenu = () => setIsMenuOpen(false);
+
+  return (
+    <Menu open={isMenuOpen} handler={setIsMenuOpen} placement="bottom-end">
+      <MenuHandler>
+        <Button
+          variant="text"
+          color="blue-gray"
+          className="flex items-center gap-1 rounded-full py-0.5 pr-2 pl-0.5 lg:ml-auto"
+        >
+          <Avatar
+            variant="circular"
+            size="sm"
+            alt="tania andrew"
+            className="border border-pink-400 p-0.5 w-9 h-9 sm:w-11 sm:h-11 "
+            src="https://images.unsplash.com/photo-1633332755192-727a05c4013d?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1480&q=80"
+          />
+          <ChevronDownIcon
+            strokeWidth={2.5}
+            className={`h-3 w-3 transition-transform ${isMenuOpen ? "rotate-180" : ""
+              }`}
+          />
+        </Button>
+      </MenuHandler>
+      <MenuList className="p-1">
+        {profileMenuItems.map(({ label, icon }, key) => {
+          const isLastItem = key === profileMenuItems.length - 1;
+          return (
+            <MenuItem
+              key={label}
+              onClick={closeMenu}
+              className={`flex items-center gap-2 rounded ${isLastItem
+                ? "hover:bg-red-500/10 focus:bg-red-500/10 active:bg-red-500/10"
+                : ""
+                }`}
+            >
+              {React.createElement(icon, {
+                className: `h-4 w-4 ${isLastItem ? "text-red-500" : ""}`,
+                strokeWidth: 2,
+              })}
+              <Typography
+                as="span"
+                variant="small"
+                className="font-normal"
+                color={isLastItem ? "red" : "inherit"}
+              >
+                {label}
+              </Typography>
+            </MenuItem>
+          );
+        })}
+      </MenuList>
+    </Menu>
   );
 }
