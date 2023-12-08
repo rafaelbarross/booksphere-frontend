@@ -11,6 +11,7 @@ import '../../globals.css'
 // import required modules
 import { Grid, Pagination, Navigation, Autoplay } from 'swiper/modules';
 import { Typography } from '@material-tailwind/react';
+import { useRouter } from 'next/navigation';
 
 // type Props = {
 //     title: string;
@@ -18,15 +19,40 @@ import { Typography } from '@material-tailwind/react';
 
 //   };
 
+type Book = {
+  id: string;
+  img: string;
+  alt: string;
+  audio?: string;
+};
+
+
+export const booksWeek: Book[] = [
+  { id: 'book1', img: './bookWeek/pequenoprincipe.jpg', alt: 'Book 1', audio:'./audio/pequenoprincipe.mp3'},
+  { id: 'book2', img: './bookWeek/book2.png', alt: 'Book 2' },
+  { id: 'book3', img: './bookWeek/book3.png', alt: 'Book 3' },
+  { id: 'book4', img: './bookWeek/book4.png', alt: 'Book 4' },
+  { id: 'book5', img: './bookWeek/book5.png', alt: 'Book 5' },
+  // Adicione mais livros conforme necessário
+];
+
 export default function BookWeek() {
+
+  const {push} = useRouter();
+
+ 
+  const readingBook = (id: string) => {
+    push(`/${id}`);
+  };
+
   return (
     <>
       <Typography variant="h3" color="blue-gray" className='mb-8'>
-            Livros da semana
-    </Typography>
+        Livros da semana
+      </Typography>
       <Swiper
 
-      slidesPerView={2}
+        slidesPerView={2}
 
         breakpoints={{
           // quando a largura da janela é >= 640px
@@ -64,43 +90,11 @@ export default function BookWeek() {
       // centeredSlides={true}
 
       >
-        <SwiperSlide className="text-center space-y-3">
-          <img className='drop-shadow-md' src="./bookWeek/book1.png" alt="" />
-        </SwiperSlide>
-
-        <SwiperSlide className="text-center  space-y-3">
-          <img className='drop-shadow-md' src="./bookWeek/book2.png" alt="" />
-      
-        </SwiperSlide>
-
-        <SwiperSlide className="text-center  space-y-3">
-          <img className='drop-shadow-md' src="./bookWeek/book3.png" alt="" />
-        </SwiperSlide>
-
-        <SwiperSlide className="text-center  space-y-3">
-          <img className='drop-shadow-md' src="./bookWeek/book4.png" alt="" />
-     
-        </SwiperSlide>
-
-        <SwiperSlide className="text-center  space-y-3">
-          <img className='drop-shadow-md' src="./bookWeek/book5.png" alt="" />
-        </SwiperSlide>
-
-        <SwiperSlide className="text-center  space-y-3">
-          <img className='drop-shadow-md' src="./bookWeek/book5.png" alt="" />
-        </SwiperSlide>
-
-        <SwiperSlide className="text-center  space-y-3">
-          <img className='drop-shadow-md' src="./bookWeek/book5.png" alt="" />
-        </SwiperSlide>
-
-        <SwiperSlide className="text-center  space-y-3">
-          <img className='drop-shadow-md' src="./bookWeek/book5.png" alt="" />
-        </SwiperSlide>
-
-        <SwiperSlide className="text-center  space-y-3">
-          <img className='drop-shadow-md' src="./bookWeek/book5.png" alt="" />
-        </SwiperSlide>
+        {booksWeek.map((book) => (
+          <SwiperSlide key={book.id} onClick={() => readingBook(book.id)} className="text-center space-y-3 cursor-pointer">
+            <img className='drop-shadow-md' src={book.img} alt={book.alt} />
+          </SwiperSlide>
+        ))}
 
 
       </Swiper>
