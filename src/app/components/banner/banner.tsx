@@ -6,7 +6,7 @@ export default function Banner() {
 
     return (
         <div className='mb-40 drop-shadow-xl'>
-        <Typography variant="h3" color="blue-gray" className='mb-8'>
+        <Typography variant="h3" color="blue-gray" className='mb-8 dark:text-pink-300'>
         Todos os gêneros
         </Typography>
 

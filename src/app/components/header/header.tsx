@@ -9,7 +9,7 @@ import {
   MenuHandler,
   MenuList,
   MenuItem,
-  Avatar, IconButton
+  Avatar, IconButton, Collapse
 } from "@material-tailwind/react";
 import {
   UserCircleIcon, ChevronDownIcon,
@@ -22,13 +22,22 @@ import {
   ArrowSmallLeftIcon
 } from "@heroicons/react/24/solid";
 
-import React, { useState } from "react";
-import Image from "next/image";
+import Image from 'next/image';
+import { useTheme } from 'next-themes';
+import React, { useContext, useEffect, useState } from "react";
 import Link from "next/link";
+import ButtonTheme from "../buttonTheme";
 
 export function Header() {
-  const [openNav, setOpenNav] = useState(false);
+  const { user, isAuthenticated, palavra } = useContext(AuthContext);
+
+  console.log('dataUser:', user?.name)
+  console.log('Logado?:', isAuthenticated)
+
+
   const [isOpen, setIsOpen] = useState(false);
+
+  const [openNav, setOpenNav] = React.useState(false);
 
   React.useEffect(() => {
     window.addEventListener(
@@ -135,18 +144,44 @@ export function Header() {
     </ul>
   );
 
-  return (
-    <Navbar className="z-10 sticky top-7 shadow-3xl mx-auto 2xl:max-w-screen-2xl xl:max-w-screen-xl px-4 py-2 lg:px-8 lg:py-3 mb-20">
 
-      <div className="container mx-auto flex items-center justify-between text-blue-gray-900 ">
+  const { systemTheme, theme, setTheme } = useTheme();
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
+
+  if (!mounted) return null;
+  const currentTheme = theme === 'system' ? systemTheme : theme;
+
+  return (
+    <Navbar className="z-10 sticky top-5  shadow-3xl dark:shadow-white  2xl:max-w-screen-2xl xl:max-w-screen-xl mx-auto px-4 py-2 lg:px-8 lg:py-3 mb-0">
+       <Typography
+                as="span"
+                variant="small"
+                className="font-normal text-black"
+                // color={isLastItem ? "red" : "inherit"}
+              >
+                  Bem-vindo:
+               {palavra}
+
+              </Typography>
+              <span className="text-black">logado?: {isAuthenticated}</span>
+
+      <div className="containe mx-aut flex items-center relative  justify-between text-blue-gray-900 ">
         {!isOpen && (
-          <div>
+          <div className="flex items-center gap-x-5">
+            <ButtonTheme />
             <Link href="/">
-              <Image className="w-32" width={1} height={1} src="./logo-leitura.svg" alt="logo do site leitura inclusiva" />
+              <Image className="w-52 sm:w-32" width={1} height={1} src="./logo-leitura.svg" alt="logo do site leitura inclusiva" />
             </Link>
           </div>
         )}
+
         <div className="flex items-center justify-between w-full">
+
           <div className={`relative block ${isOpen ? 'w-full' : 'w-10'} transition-width duration-200 ease-in-out`}>
             <span className="sr-only">Search</span>
 
@@ -156,14 +191,14 @@ export function Header() {
 
 
                 <span className=" flex items-center ">
-                  <button className=" px-2 rounded-md h-full" onClick={() => setIsOpen(!isOpen)}>
+                  <button className=" px- mr-1 rounded-md h-full" onClick={() => setIsOpen(!isOpen)}>
                     <ArrowSmallLeftIcon className="h-6 w-6 text-pink-300" />
                   </button>
                 </span>
 
-                <div className=" pl-2 w-full flex bo rounded-md   focus:outline-none focus:border-sky-500 focus:ring-sky-500 focus:ring-pink-400 focus:ring-1  py-2 lg:py-3">
+                <div className=" pl-2 w-full flex bo rounded-md   focus:outline-none focus:border-sky-500 focus:ring-sky-500 focus:ring-pink-400 focus:ring-1  py-2 lg:py-2">
 
-                 
+
 
                   <input
                     className="placeholder:itali placeholder:text-pink-200 block bg-transparent w-full focus:outline-none  rounded-md py-0 pl-0 pr-3  sm:text-sm"
@@ -172,7 +207,7 @@ export function Header() {
                     name="search"
                   />
 
-                   <span className=" flex items-center ">
+                  <span className=" flex items-center ">
                     <MagnifyingGlassIcon className="h-6 w-6 text-pink-200 " />
                   </span>
 
@@ -181,10 +216,15 @@ export function Header() {
               </div>
             )}
           </div>
+
+          {!isOpen && (
+            <div className="mr-4 hidden lg:block">{navList}</div>
+          )}
+
           {!isOpen && (
             <div className="flex space-x-1">
               <span className=" inset-y-0 left-0 flex items-center pl-2">
-                <button className="px-2 rounded-md h-full" onClick={() => setIsOpen(!isOpen)}>
+                <button className="px-2 rounded-md h-full" onClick={() => { setIsOpen(!isOpen); setOpenNav(false) }}>
                   <MagnifyingGlassIcon className="h-6 w-6 text-pink-200" />
                 </button>
               </span>
@@ -192,7 +232,79 @@ export function Header() {
             </div>
           )}
         </div>
+
+        {!isOpen && (
+          <IconButton
+            variant="text"
+            className=" ml-2 mr-2 h-6 w-6 text-inherit hover:bg-transparent focus:bg-transparent active:bg-transparent lg:hidden transition duration-1000 ease-in-out"
+            ripple={false}
+            onClick={() => setOpenNav(!openNav)}
+          >
+            {openNav ? (
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                className="h-6 w-6 text-pink-400 transition duration-1000 ease-in-out"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+                strokeWidth={2}
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  d="M6 18L18 6M6 6l12 12"
+                />
+              </svg>
+            ) : (
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                className="h-6 w-6  text-pink-400 transition duration-1000 ease-in-out"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth={2}
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  d="M4 6h16M4 12h16M4 18h16"
+                />
+              </svg>
+            )}
+          </IconButton>
+        )}
+
       </div>
+
+      {/* {isOpen && (
+        <> */}
+
+
+      {/* MOBILE */}
+      <MobileNav open={openNav} className=" -white" >
+        <div>
+
+          {navList}
+          <div className="flex items-center gap-x-1 ">
+
+            <a href="/register" className="w-full">
+              <Button fullWidth variant="text" size="sm" className="" >
+                <span>Log In</span>
+              </Button>
+            </a>
+
+            <a href="/login" className="w-full">
+              <Button fullWidth variant="gradient" size="sm" className="" color="pink">
+                <span>Sign in</span>
+              </Button>
+            </a>
+
+          </div>
+        </div>
+      </MobileNav>
+
+      {/* </>
+      )} */}
+
 
     </Navbar>
   );
@@ -223,6 +335,7 @@ const profileMenuItems = [
 ];
 
 function ProfileMenu() {
+  const { user } = useContext(AuthContext);
   const [isMenuOpen, setIsMenuOpen] = React.useState(false);
 
   const closeMenu = () => setIsMenuOpen(false);
@@ -240,7 +353,7 @@ function ProfileMenu() {
             size="sm"
             alt="tania andrew"
             className="border border-pink-400 p-0.5 w-9 h-9 sm:w-11 sm:h-11 "
-            src="https://images.unsplash.com/photo-1633332755192-727a05c4013d?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1480&q=80"
+            src={'https://github.com/rafaelbarross.png'}
           />
           <ChevronDownIcon
             strokeWidth={2.5}
@@ -249,6 +362,21 @@ function ProfileMenu() {
           />
         </Button>
       </MenuHandler>
+
+      {/* <div className="flex space-x-4">
+
+        <a href="/login">
+          <Button variant="text" className="text-pink-400 hidden lg:inline-block ">
+            Sign in
+          </Button>
+        </a>
+
+        <a className="hidden  lg:inline-block" href="/register">
+          <Button variant="filled" color="pink">
+            Sign up
+          </Button>
+        </a>
+      </div> */}
       <MenuList className="p-1">
         {profileMenuItems.map(({ label, icon }, key) => {
           const isLastItem = key === profileMenuItems.length - 1;
@@ -261,6 +389,16 @@ function ProfileMenu() {
                 : ""
                 }`}
             >
+              {/* <Typography
+                as="span"
+                variant="small"
+                className="font-normal"
+                // color={isLastItem ? "red" : "inherit"}
+              >
+                {user?.name}
+              </Typography> */}
+                <hr className="my-3" />
+
               {React.createElement(icon, {
                 className: `h-4 w-4 ${isLastItem ? "text-red-500" : ""}`,
                 strokeWidth: 2,
@@ -277,6 +415,185 @@ function ProfileMenu() {
           );
         })}
       </MenuList>
+      {/* <StickyNavbar/> */}
+     
     </Menu>
+  );
+}
+
+
+// ===================================================================================
+
+
+import {
+
+  Card,
+} from "@material-tailwind/react";
+import { AuthContext } from "@/app/context/authContext";
+import { api } from "@/app/services/api";
+
+export function StickyNavbar() {
+  const [openNav, setOpenNav] = React.useState(false);
+
+  React.useEffect(() => {
+    window.addEventListener(
+      "resize",
+      () => window.innerWidth >= 960 && setOpenNav(false),
+    );
+  }, []);
+
+  const navList = (
+    <ul className="mt-2 mb-4 flex flex-col gap-2 lg:mb-0 lg:mt-0 lg:flex-row lg:items-center lg:gap-6">
+      <Typography
+        as="li"
+        variant="small"
+        color="blue-gray"
+        className="p-1 font-normal"
+      >
+        <a href="#" className="flex items-center">
+          Pages
+        </a>
+      </Typography>
+      <Typography
+        as="li"
+        variant="small"
+        color="blue-gray"
+        className="p-1 font-normal"
+      >
+        <a href="#" className="flex items-center">
+          Account
+        </a>
+      </Typography>
+      <Typography
+        as="li"
+        variant="small"
+        color="blue-gray"
+        className="p-1 font-normal"
+      >
+        <a href="#" className="flex items-center">
+          Blocks
+        </a>
+      </Typography>
+      <Typography
+        as="li"
+        variant="small"
+        color="blue-gray"
+        className="p-1 font-normal"
+      >
+        <a href="#" className="flex items-center">
+          Docs
+        </a>
+      </Typography>
+    </ul>
+  );
+
+  return (
+    <div className="-m-6 max-h-[768px] w-[calc(100%+48px)] overflow-scroll">
+      <Navbar className="sticky top-0 z-10 h-max max-w-full rounded-none px-4 py-2 lg:px-8 lg:py-4">
+        <div className="flex items-center justify-between text-blue-gray-900">
+          <Typography
+            as="a"
+            href="#"
+            className="mr-4 cursor-pointer py-1.5 font-medium"
+          >
+            Material Tailwind
+          </Typography>
+          <div className="flex items-center gap-4">
+            <div className="mr-4 hidden lg:block">{navList}</div>
+            <div className="flex items-center gap-x-1">
+              <Button
+                variant="text"
+                size="sm"
+                className="hidden lg:inline-block"
+              >
+                <span>Log In</span>
+              </Button>
+              <Button
+                variant="gradient"
+                size="sm"
+                className="hidden lg:inline-block"
+              >
+                <span>Sign in</span>
+              </Button>
+            </div>
+            <IconButton
+              variant="text"
+              className="ml-auto h-6 w-6 text-inherit hover:bg-transparent focus:bg-transparent active:bg-transparent lg:hidden"
+              ripple={false}
+              onClick={() => setOpenNav(!openNav)}
+            >
+              {openNav ? (
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="none"
+                  className="h-6 w-6"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                  strokeWidth={2}
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    d="M6 18L18 6M6 6l12 12"
+                  />
+                </svg>
+              ) : (
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  className="h-6 w-6"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth={2}
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    d="M4 6h16M4 12h16M4 18h16"
+                  />
+                </svg>
+              )}
+            </IconButton>
+          </div>
+        </div>
+        <MobileNav open={openNav}>
+          {navList}
+          <div className="flex items-center gap-x-1">
+            <Button fullWidth variant="text" size="sm" className="">
+              <span>Log In</span>
+            </Button>
+            <Button fullWidth variant="gradient" size="sm" className="">
+              <span>Sign in</span>
+            </Button>
+          </div>
+        </MobileNav>
+      </Navbar>
+      <div className="mx-auto max-w-screen-md py-12">
+        <Card className="mb-12 overflow-hidden">
+          <img
+            alt="nature"
+            className="h-[32rem] w-full object-cover object-center"
+            src="https://images.unsplash.com/photo-1485470733090-0aae1788d5af?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=2717&q=80"
+          />
+        </Card>
+        <Typography variant="h2" color="blue-gray" className="mb-2">
+          What is Material Tailwind
+        </Typography>
+        <Typography color="gray" className="font-normal">
+          Can you help me out? you will get a lot of free exposure doing this
+          can my website be in english?. There is too much white space do less
+          with more, so that will be a conversation piece can you rework to make
+          the pizza look more delicious other agencies charge much lesser can
+          you make the blue bluer?. I think we need to start from scratch can my
+          website be in english?, yet make it sexy i&apos;ll pay you in a week
+          we don&apos;t need to pay upfront i hope you understand can you make
+          it stand out more?. Make the font bigger can you help me out? you will
+          get a lot of free exposure doing this that&apos;s going to be a chunk
+          of change other agencies charge much lesser. Are you busy this
+          weekend? I have a new project with a tight deadline that&apos;s going
+          to be a chunk of change. There are more projects lined up charge extra
+          the next time.
+        </Typography>
+      </div>
+    </div>
   );
 }

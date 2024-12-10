@@ -1,27 +1,30 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
-/* 
-:root {
-  --foreground-rgb: 0, 0, 0;
-  --background-start-rgb: 214, 219, 220;
-  --background-end-rgb: 255, 255, 255;
-}
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --foreground-rgb: 255, 255, 255;
-    --background-start-rgb: 0, 0, 0;
-    --background-end-rgb: 0, 0, 0;
-  }
-} */
-
-body {
-padding: 0 1rem;
-  background: #F8FAFC;
+*{
+  padding: 0;
+  margin: 0;
 }
 
 .swiper-button-next, .swiper-button-prev {
-  color: #FE78A6; /* Substitua 'red' pela cor desejada */
-  backdrop-filter: blur(2px);
+  color: #FE78A6 !important; /* Substitua 'red' pela cor desejada */
+  backdrop-filter: blur(2px) !important;
 }
+
+
+.swiper-button-next, .swiper-container-rtl .swiper-button-prev {
+  right: 4px;
+  z-index: 20;
+
+}
+
+.swiper-button-prev, .swiper-container-rtl .swiper-button-next {
+  left: 4px;
+  z-index: 20;
+}
+
+.swiper-pagination-bullet {
+  background: #FF3E7F !important; /* Sua cor desejada aqui */
+}
+

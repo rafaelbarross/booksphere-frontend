@@ -24,7 +24,7 @@ export default function ContScroll() {
         modules={[FreeMode, Scrollbar, Mousewheel]}
         className="max-h-80  xl:max-h-[21rem]  2xl:max-h-[39rem] "
       >
-        <SwiperSlide className='pr-5  sm:pr-8 text-justify '>
+        <SwiperSlide className='pr-5  sm:pr-8 text-justify dark:text-white '>
           {/* <h4>Scroll Container</h4> */}
           <p>
             Lorem ipsum dolor sit amet, consectetur adipiscing elit. In luctus,

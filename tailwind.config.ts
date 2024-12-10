@@ -2,6 +2,7 @@ import type { Config } from 'tailwindcss'
 const withMT = require("@material-tailwind/react/utils/withMT");
 
 module.exports = withMT({
+  darkMode: 'class',
   content: [
     // './pages/**/*.{ts,tsx}', './public/**/*.html', './node_modules/flowbite-react/**/*.js',
     './src/pages/**/*.{js,ts,jsx,tsx,mdx}',
@@ -10,6 +11,16 @@ module.exports = withMT({
   ],
   theme: {
     extend: {
+
+      // backgroundImage: {
+      //   'book-cover': "url('./book-cover.jpg')",
+      // },
+
+      colors: {
+          // 'dark': '#232A3C',
+          'dark': '#26233D',
+          'medium': '#293245',
+      },
       // backgroundImage: {
       //   'gradient-radial': 'radial-gradient(var(--tw-gradient-stops))',
       //   'gradient-conic':
